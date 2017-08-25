@@ -29,10 +29,10 @@ if [ -s packer ] ; then
   echo packer_1.0.4_linux_amd64.zip already downloaded.
 else
   wget -O  packer_${PACKER_VERSION}_linux_amd64.zip $URL
+  unzip packer_${PACKER_VERSION}_linux_amd64.zip
+  rm /vagrant/bin/packer_${PACKER_VERSION}_linux_amd64.zip
 fi
 
-unzip packer_${PACKER_VERSION}_linux_amd64.zip
-rm /vagrant/bin/packer_${PACKER_VERSION}_linux_amd64.zip
 
 #Set path
 echo "export PATH=$PATH:/usr/local/git/bin:/vagrant/" >> /etc/bashrc
