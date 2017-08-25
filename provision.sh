@@ -25,7 +25,7 @@ chmod -w /etc/sudoers
 mkdir /vagrant/bin -p
 
 cd /vagrant/bin
-if [ -s packer ] ; then
+if [ -s /vagrant/bin/packer ] ; then
   echo packer_1.0.4_linux_amd64.zip already downloaded.
 else
   wget -O  packer_${PACKER_VERSION}_linux_amd64.zip $URL
@@ -35,7 +35,13 @@ fi
 
 
 #Set path
-echo "export PATH=$PATH:/usr/local/git/bin:/vagrant/" >> /etc/bashrc
+grep -q "export PATH=/usr/local/git/bin:/vagrant/:$PATH" /home/vagrant/.bashrc &&
+	echo "PATH already set" || echo "export PATH=/usr/local/git/bin:/vagrant/:$PATH" >> /home/vagrant/.bashrc
 
 sed -i -e 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/sysconfig/network-scripts/ifcfg-eth1 #Some versions of VBox do not set this correctly and the ifcfg does not start on boot
-reboot
+
+if [ $(getenforce) == "Enabled" ] ; 
+then
+  reboot
+fi
+
