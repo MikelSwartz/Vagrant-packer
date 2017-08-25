@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+PACKER_VERSION="0.8.6" 
+URL="https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
+
 yum install net-tools telnet wget vim unzip -y
 
 echo 127.0.0.1   localhost.localhost localhost > /etc/hosts
@@ -23,11 +26,11 @@ cd /vagrant/
 if [ -s packer_1.0.4_linux_amd64.zip ] ; then
   echo packer_1.0.4_linux_amd64.zip already downloaded.
 else
-  wget -O  packer_1.0.4_linux_amd64.zip https://releases.hashicorp.com/packer/1.0.4/packer_1.0.4_linux_amd64.zip?_ga=2.193101037.1119294817.1503665352-727401275.1503665352
+  wget -O  packer_${PACKER_VERSION}_linux_amd64.zip $URL
 fi
 
-unzip packer_1.0.4_linux_amd64.zip
-rm /vagrant/packer_1.0.4_linux_amd64.zip
+unzip packer_${PACKER_VERSION}_linux_amd64.zip
+rm /vagrant/packer_${PACKER_VERSION}_linux_amd64.zip
 
 sed -i -e 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/sysconfig/network-scripts/ifcfg-eth1 #Some versions of VBox do not set this correctly and the ifcfg does not start on boot
 reboot
