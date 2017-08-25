@@ -22,15 +22,20 @@ sed -i 's/^\%wheel.*/##%wheel ALL=(ALL)       ALL/g' /etc/sudoers
 sed -i 's/^# \%wheel.*/%wheel  ALL=(ALL)       NOPASSWD: ALL/g' /etc/sudoers
 chmod -w /etc/sudoers
 
-cd /vagrant/
-if [ -s packer_1.0.4_linux_amd64.zip ] ; then
+mkdir /vagrant/bin -p
+
+cd /vagrant/bin
+if [ -s packer ] ; then
   echo packer_1.0.4_linux_amd64.zip already downloaded.
 else
   wget -O  packer_${PACKER_VERSION}_linux_amd64.zip $URL
 fi
 
 unzip packer_${PACKER_VERSION}_linux_amd64.zip
-rm /vagrant/packer_${PACKER_VERSION}_linux_amd64.zip
+rm /vagrant/bin/packer_${PACKER_VERSION}_linux_amd64.zip
+
+#Set path
+echo "export PATH=$PATH:/usr/local/git/bin:/vagrant/" >> /etc/bashrc
 
 sed -i -e 's/NM_CONTROLLED=no/NM_CONTROLLED=yes/' /etc/sysconfig/network-scripts/ifcfg-eth1 #Some versions of VBox do not set this correctly and the ifcfg does not start on boot
 reboot
